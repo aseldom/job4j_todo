@@ -17,8 +17,6 @@ public interface TaskStore {
 
     Collection<Task> findAll();
 
-    Collection<Task> findNew(boolean... newTask);
-
-    Collection<Task> findComplete();
+    Collection<Task> findNewComplete(boolean newTask);
 
 }

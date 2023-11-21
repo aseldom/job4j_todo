@@ -47,12 +47,8 @@ public class SimpleTaskService implements TaskService {
     }
 
     @Override
-    public Collection<Task> findNew() {
-        return taskStore.findNew();
+    public Collection<Task> findNewComplete(boolean newTask) {
+        return taskStore.findNewComplete(newTask);
     }
 
-    @Override
-    public Collection<Task> findComplete() {
-        return taskStore.findComplete();
-    }
 }
