@@ -35,7 +35,7 @@ public class HbnUserStore implements UserStore {
         Optional<User> result;
         try {
             session.beginTransaction();
-            result = session.createQuery("FROM Task WHERE login = fLogin AND password = fPassword", User.class)
+            result = session.createQuery("FROM User WHERE login = :fLogin AND password = :fPassword", User.class)
                     .setParameter("fLogin", login)
                     .setParameter("fPassword", password)
                     .uniqueResultOptional();
