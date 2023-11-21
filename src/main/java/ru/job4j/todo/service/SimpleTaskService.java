@@ -31,9 +31,7 @@ public class SimpleTaskService implements TaskService {
 
     @Override
     public boolean updateDone(int id) {
-        Task task = taskStore.findById(id).get();
-        task.setDone(true);
-        return taskStore.update(task);
+        return taskStore.updateDone(id);
     }
 
     @Override

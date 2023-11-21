@@ -47,7 +47,7 @@ public class HbnTaskStore implements TaskStore {
         } finally {
             session.close();
         }
-        return (rowCount != 0);
+        return rowCount != 0;
 
     }
 
@@ -70,7 +70,27 @@ public class HbnTaskStore implements TaskStore {
         } finally {
             session.close();
         }
-        return (rowCount != 0);
+        return rowCount != 0;
+    }
+
+    @Override
+    public boolean updateDone(int id) {
+        Session session = sf.openSession();
+        int rowCount = 0;
+        try {
+            session.beginTransaction();
+            rowCount = session.createQuery(
+                            "UPDATE Task SET done = :fDone WHERE id = :fId")
+                    .setParameter("fDone", true)
+                    .setParameter("fId", id)
+                    .executeUpdate();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return rowCount != 0;
     }
 
     @Override
