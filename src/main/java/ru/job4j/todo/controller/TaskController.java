@@ -4,21 +4,19 @@ import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.TaskService;
 
 @Controller
 @AllArgsConstructor
+@RequestMapping("/tasks")
 @ThreadSafe
 public class TaskController {
 
     private final TaskService taskService;
 
-    @GetMapping({"/", "/index", "/tasks"})
+    @GetMapping("")
     public String getAll(Model model) {
         model.addAttribute("tasks", taskService.findAll());
         return "tasks/list";
@@ -36,81 +34,68 @@ public class TaskController {
         return "tasks/list";
     }
 
-    @GetMapping("/tasks/{id}")
+    @GetMapping("/{id}")
     public String getById(Model model, @PathVariable int id) {
         var taskOptional = taskService.findById(id);
         if (taskOptional.isEmpty()) {
-            model.addAttribute("message", "Вакансия с указанным идентификатором не найдена");
+            model.addAttribute("message", "Задача с указанным идентификатором не найдена");
             return "errors/404";
         }
         model.addAttribute("task", taskOptional.get());
         return "tasks/one";
     }
 
-    @GetMapping("tasks/edit/{id}")
+    @GetMapping("edit/{id}")
     public String edit(Model model, @PathVariable int id) {
         var taskOptional = taskService.findById(id);
         if (taskOptional.isEmpty()) {
-            model.addAttribute("message", "Вакансия с указанным идентификатором не найдена");
+            model.addAttribute("message", "Задача с указанным идентификатором не найдена");
             return "errors/404";
         }
         model.addAttribute("task", taskOptional.get());
         return "tasks/edit";
     }
 
-    @PostMapping("/tasks/edit")
+    @PostMapping("/edit")
     public String edit(@ModelAttribute Task task, Model model) {
-        try {
-            taskService.update(task);
-            return "redirect:/tasks";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
+        if (!taskService.update(task)) {
+            model.addAttribute("message", "Задача с указанным идентификатором не найдена");
             return "errors/404";
         }
+        return "redirect:/tasks";
     }
 
-    @GetMapping("/tasks/create")
+    @GetMapping("/create")
     public String getCreationPage() {
         return "tasks/create";
     }
 
-    @PostMapping("/tasks/create")
+    @PostMapping("/create")
     public String create(@ModelAttribute Task task, Model model) {
-        try {
-            taskService.add(task);
-            return "redirect:/tasks";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
+        if (taskService.add(task) == null) {
+            model.addAttribute("message", "Создать задачу не удалось");
             return "errors/404";
+
         }
+        return "redirect:/tasks";
     }
 
-    @GetMapping("/tasks/done/{id}")
+    @GetMapping("/done/{id}")
     public String updateDone(Model model, @PathVariable int id) {
-        try {
-            if (!taskService.updateDone(id)) {
-                model.addAttribute("message", "Задание с указанным идентификатором не найдено");
-                return "errors/404";
-            }
-            return "redirect:/tasks";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
+        if (!taskService.updateDone(id)) {
+            model.addAttribute("message", "Задание с указанным идентификатором не найдено");
             return "errors/404";
         }
+        return "redirect:/tasks";
     }
 
-    @GetMapping("/tasks/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String delete(Model model, @PathVariable int id) {
-        try {
-            if (!taskService.deleteById(id)) {
-                model.addAttribute("message", "Задание с указанным идентификатором не найдено");
-                return "errors/404";
-            }
-            return "redirect:/tasks";
-        } catch (Exception exception) {
-            model.addAttribute("message", exception.getMessage());
+        if (!taskService.deleteById(id)) {
+            model.addAttribute("message", "Задание с указанным идентификатором не найдено");
             return "errors/404";
         }
+        return "redirect:/tasks";
     }
 
 }
