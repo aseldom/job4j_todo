@@ -15,7 +15,7 @@ public class HbnUserStore implements UserStore {
     private final SessionFactory sf;
 
     @Override
-    public Optional<User> save(User user) {
+    public User save(User user) {
         Session session = sf.openSession();
         try {
             session.beginTransaction();
@@ -26,7 +26,7 @@ public class HbnUserStore implements UserStore {
         } finally {
             session.close();
         }
-        return Optional.ofNullable(user);
+        return user;
     }
 
     @Override
