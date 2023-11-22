@@ -19,6 +19,6 @@ public interface TaskService {
 
     Collection<Task> findAll();
 
-    Collection<Task> findNewComplete(boolean newTask);
+    Collection<Task> findCompleteNew(boolean doneTask);
 
 }

@@ -125,13 +125,13 @@ public class HbnTaskStore implements TaskStore {
     }
 
     @Override
-    public Collection<Task> findNewComplete(boolean newTask) {
+    public Collection<Task> findCompleteNew(boolean doneTask) {
         Session session = sf.openSession();
-        Collection<Task> result;
+        List<Task> result;
         try {
             session.beginTransaction();
             result = session.createQuery("FROM Task WHERE done = :fDone", Task.class)
-                    .setParameter("fDone", !newTask)
+                    .setParameter("fDone", doneTask)
                     .list();
             session.getTransaction().commit();
         } finally {

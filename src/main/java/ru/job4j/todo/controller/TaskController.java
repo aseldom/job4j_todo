@@ -24,13 +24,13 @@ public class TaskController {
 
     @GetMapping("/new_tasks")
     public String getNew(Model model) {
-        model.addAttribute("tasks", taskService.findNewComplete(true));
+        model.addAttribute("tasks", taskService.findCompleteNew(false));
         return "tasks/list";
     }
 
     @GetMapping("/complete")
     public String getComplete(Model model) {
-        model.addAttribute("tasks", taskService.findNewComplete(false));
+        model.addAttribute("tasks", taskService.findCompleteNew(true));
         return "tasks/list";
     }
 
@@ -72,11 +72,7 @@ public class TaskController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute Task task, Model model) {
-        if (taskService.add(task) == null) {
-            model.addAttribute("message", "Создать задачу не удалось");
-            return "errors/404";
-
-        }
+        taskService.add(task);
         return "redirect:/tasks";
     }
 
