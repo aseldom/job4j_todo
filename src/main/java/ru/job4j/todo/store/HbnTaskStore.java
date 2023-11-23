@@ -12,7 +12,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class HbnTaskStore implements TaskStore {
 
-    CrudRepository crudRepository;
+    private final CrudRepository crudRepository;
 
     @Override
     public Task add(Task task) {
