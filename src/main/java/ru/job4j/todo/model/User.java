@@ -5,13 +5,13 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "todo_user")
 @Getter
 @Setter
 @ToString
 @EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "todo_user")
 public class User {
 
     @Id
