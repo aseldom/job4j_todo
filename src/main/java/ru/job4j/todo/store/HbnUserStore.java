@@ -21,13 +21,11 @@ public class HbnUserStore implements UserStore {
     public Optional<User> save(User user) {
         try {
             crudRepository.run(session -> session.persist(user));
+            return Optional.of(user);
         } catch (Exception e) {
             LOGGER.error("Error occurred", e);
-            if (e.getMessage().contains("could not execute statement")) {
-                return Optional.empty();
-            }
         }
-        return Optional.of(user);
+        return Optional.empty();
     }
 
     @Override
