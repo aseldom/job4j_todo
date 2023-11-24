@@ -6,7 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @AllArgsConstructor
@@ -71,7 +74,9 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task, Model model) {
+    public String create(@ModelAttribute Task task, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        task.setUser(user);
         taskService.add(task);
         return "redirect:/tasks";
     }

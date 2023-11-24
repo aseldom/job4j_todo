@@ -28,14 +28,18 @@
                     <th scope="col">Имя задачи</th>
                     <th scope="col">дата создания</th>
                     <th scope="col">Выполнена/не выполнена</th>
+                    <th scope="col">Автор</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="task: ${tasks}">
-                    <td><a th:text="${task.title}" th:href="@{/tasks/{taskId}(taskId=${task.id})}"></a>
-                    <td th:text="${task.created}"></td>
-<!--                    </td>-->
-<!--                    <td th:text="${task.done}"/>-->
+                    <td>
+                        <a th:text="${task.title}" th:href="@{/tasks/{taskId}(taskId=${task.id})}"></a>
+                    </td>
+                    <td
+                            th:text="${task.created}">
+                    </td>
+
                     <td>
                         <span th:if="${task.done}">
                             <i class="bi bi-check-square"></i>
@@ -43,6 +47,9 @@
                         <span th:if="${!task.done}">
                             <i class="bi bi-square"></i>
                         </span>
+                    </td>
+                    <td
+                        th:text="${task.user.name}">
                     </td>
                 </tr>
                 </tbody>
