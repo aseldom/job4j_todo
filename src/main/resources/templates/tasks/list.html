@@ -28,6 +28,7 @@
                     <th scope="col">Имя задачи</th>
                     <th scope="col">дата создания</th>
                     <th scope="col">Выполнена/не выполнена</th>
+                    <th scope="col">Приоритет</th>
                     <th scope="col">Автор</th>
                 </tr>
                 </thead>
@@ -47,6 +48,9 @@
                         <span th:if="${!task.done}">
                             <i class="bi bi-square"></i>
                         </span>
+                    </td>
+                    <td
+                            th:text="${task.priority.name}">
                     </td>
                     <td
                         th:text="${task.user.name}">

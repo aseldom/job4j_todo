@@ -10,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tasks")
@@ -17,6 +18,7 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private int id;
 
     @ManyToOne
@@ -26,4 +28,8 @@ public class Task {
     private String description;
     private boolean done;
     private LocalDateTime created = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "priority_id")
+    private Priority priority;
 }

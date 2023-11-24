@@ -32,12 +32,17 @@ public class HbnTaskStore implements TaskStore {
     @Override
     public boolean update(Task task) {
         int res = crudRepository.runWithConfirm(
-                "UPDATE Task SET title = :fTitle, description = :fDescription, done = :fDone WHERE id = :fId",
+                "UPDATE Task SET "
+                        + "title = :fTitle,"
+                        + " description = :fDescription,"
+                        + " done = :fDone WHERE id = :fId,"
+                        + " priority = :fPriority",
                 Map.of(
                         "fId", task.getId(),
                         "fTitle", task.getTitle(),
                         "fDescription", task.getDescription(),
-                        "fDone", task.isDone())
+                        "fDone", task.isDone(),
+                        "fPriority", task.getPriority())
         );
         return res != 0;
     }
@@ -57,7 +62,7 @@ public class HbnTaskStore implements TaskStore {
     @Override
     public Optional<Task> findById(int id) {
         return crudRepository.optional(
-                "FROM Task WHERE id = :fId",
+                "FROM Task t JOIN FETCH t.priority WHERE t.id = :fId",
                 Task.class,
                 Map.of("fId", id)
         );
@@ -66,7 +71,7 @@ public class HbnTaskStore implements TaskStore {
     @Override
     public Collection<Task> findAll() {
         return crudRepository.query(
-                "FROM Task",
+                "FROM Task t JOIN FETCH t.priority",
                 Task.class
         );
     }
@@ -74,7 +79,7 @@ public class HbnTaskStore implements TaskStore {
     @Override
     public Collection<Task> findCompleteNew(boolean doneTask) {
         return crudRepository.query(
-                "FROM Task WHERE done = :fDone",
+                "FROM Task t JOIN FETCH t.priority WHERE done = :fDone",
                 Task.class,
                 Map.of("fDone", doneTask)
         );
