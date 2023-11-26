@@ -5,8 +5,10 @@ import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.todo.model.Priority;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.model.User;
+import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.service.TaskService;
 
 import javax.servlet.http.HttpSession;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpSession;
 public class TaskController {
 
     private final TaskService taskService;
+    private final PriorityService priorityService;
 
     @GetMapping("")
     public String getAll(Model model) {
@@ -56,11 +59,14 @@ public class TaskController {
             return "errors/404";
         }
         model.addAttribute("task", taskOptional.get());
+        model.addAttribute("priorities", priorityService.findAll());
         return "tasks/edit";
     }
 
     @PostMapping("/edit")
     public String edit(@ModelAttribute Task task, Model model) {
+        Priority priority = priorityService.findById(task.getPriority().getId()).get();
+        task.setPriority(priority);
         if (!taskService.update(task)) {
             model.addAttribute("message", "Задача с указанным идентификатором не найдена");
             return "errors/404";
@@ -69,7 +75,8 @@ public class TaskController {
     }
 
     @GetMapping("/create")
-    public String getCreationPage() {
+    public String getCreationPage(Model model) {
+        model.addAttribute("priorities", priorityService.findAll());
         return "tasks/create";
     }
 

@@ -35,8 +35,9 @@ public class HbnTaskStore implements TaskStore {
                 "UPDATE Task SET "
                         + "title = :fTitle,"
                         + " description = :fDescription,"
-                        + " done = :fDone WHERE id = :fId,"
-                        + " priority = :fPriority",
+                        + " priority = :fPriority,"
+                        + " done = :fDone WHERE id = :fId",
+
                 Map.of(
                         "fId", task.getId(),
                         "fTitle", task.getTitle(),
