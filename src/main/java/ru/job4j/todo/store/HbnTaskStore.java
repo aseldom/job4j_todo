@@ -30,22 +30,8 @@ public class HbnTaskStore implements TaskStore {
     }
 
     @Override
-    public boolean update(Task task) {
-        int res = crudRepository.runWithConfirm(
-                "UPDATE Task SET "
-                        + "title = :fTitle,"
-                        + " description = :fDescription,"
-                        + " priority = :fPriority,"
-                        + " done = :fDone WHERE id = :fId",
-
-                Map.of(
-                        "fId", task.getId(),
-                        "fTitle", task.getTitle(),
-                        "fDescription", task.getDescription(),
-                        "fDone", task.isDone(),
-                        "fPriority", task.getPriority())
-        );
-        return res != 0;
+    public void update(Task task) {
+        crudRepository.run(session -> session.merge(task));
     }
 
     @Override
@@ -63,7 +49,7 @@ public class HbnTaskStore implements TaskStore {
     @Override
     public Optional<Task> findById(int id) {
         return crudRepository.optional(
-                "FROM Task t JOIN FETCH t.priority WHERE t.id = :fId",
+                "FROM Task t JOIN FETCH t.priority JOIN FETCH t.categories WHERE t.id = :fId",
                 Task.class,
                 Map.of("fId", id)
         );

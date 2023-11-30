@@ -12,5 +12,9 @@
     <include file="scripts/015_ddl_create_todo_user_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/002_ddl_alter_table_tasks_add_column_user_id.sql" relativeToChangelogFile="true"/>
     <include file="scripts/016_ddl_create_properties_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/017_ddl_create_categories_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/018_dml_insert_categories.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/019_ddl_create_categories_tasks.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/020_dml_insert_categories_tasks.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
