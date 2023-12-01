@@ -10,7 +10,7 @@ public interface CategoryStore {
 
     Collection<Category> findAll();
 
-    List<Category> findAllById(List<Integer> list);
+    Collection<Category> findAllById(List<Integer> list);
 
     Optional<Category> findById(int id);
 
