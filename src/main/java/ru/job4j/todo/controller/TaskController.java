@@ -14,6 +14,8 @@ import ru.job4j.todo.service.TaskService;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+import static ru.job4j.todo.util.ConvertTimeZone.covertTimeZone;
+
 @Controller
 @AllArgsConstructor
 @RequestMapping("/tasks")
@@ -24,32 +26,41 @@ public class TaskController {
     private final PriorityService priorityService;
     private final CategoryService categoryService;
 
-    @GetMapping("")
-    public String getAll(Model model) {
-        model.addAttribute("tasks", taskService.findAll());
+    @GetMapping()
+    public String getAll(Model model, HttpSession session) {
+        model.addAttribute("tasks",
+                covertTimeZone(taskService.findAll(), (User) session.getAttribute("user"))
+        );
         return "tasks/list";
     }
 
     @GetMapping("/new_tasks")
-    public String getNew(Model model) {
-        model.addAttribute("tasks", taskService.findCompleteNew(false));
+    public String getNew(Model model, HttpSession session) {
+        model.addAttribute("tasks",
+                covertTimeZone(taskService.findCompleteNew(false), (User) session.getAttribute("user"))
+        );
         return "tasks/list";
     }
 
     @GetMapping("/complete")
-    public String getComplete(Model model) {
-        model.addAttribute("tasks", taskService.findCompleteNew(true));
+    public String getComplete(Model model, HttpSession session) {
+        model.addAttribute("tasks",
+                covertTimeZone(taskService.findCompleteNew(true), (User) session.getAttribute("user"))
+        );
         return "tasks/list";
     }
 
     @GetMapping("/{id}")
-    public String getById(Model model, @PathVariable int id) {
+    public String getById(Model model, @PathVariable int id, HttpSession session) {
         var taskOptional = taskService.findById(id);
         if (taskOptional.isEmpty()) {
             model.addAttribute("message", "Задача с указанным идентификатором не найдена");
             return "errors/404";
         }
-        model.addAttribute("task", taskOptional.get());
+        model.addAttribute("task",
+                covertTimeZone(List.of(taskOptional.get()), (User) session.getAttribute("user"))
+                        .iterator().next()
+        );
         return "tasks/one";
     }
 
@@ -75,12 +86,15 @@ public class TaskController {
 
     @GetMapping("/create")
     public String getCreationPage(Model model) {
+        model.addAttribute("task", new Task());
         model.addAttribute("priorities", priorityService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         return "tasks/create";
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute Task task, HttpSession session) {
+    public String create(@ModelAttribute Task task, @RequestParam List<Integer> categoriesId, HttpSession session) {
+        task.setCategories(categoryService.findAllById(categoriesId));
         User user = (User) session.getAttribute("user");
         task.setUser(user);
         taskService.add(task);

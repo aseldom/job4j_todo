@@ -7,6 +7,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
+import java.util.TimeZone;
+
 @Configuration
 public class HibernateConfiguration {
 
@@ -16,4 +19,10 @@ public class HibernateConfiguration {
                 .configure().build();
         return new MetadataSources(registry).buildMetadata().buildSessionFactory();
     }
+
+    @PostConstruct
+    void initTimeZone() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    }
+
 }

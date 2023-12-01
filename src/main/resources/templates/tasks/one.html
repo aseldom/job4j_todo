@@ -41,7 +41,7 @@
 
                     <td th:text="${task.title}"/>
                     <td th:text="${task.description}"/>
-                    <td th:text="${task.created}"/>
+                    <td th:text="${#temporals.format(task.created, 'HH:mm dd-MM-yyyy')}" />
                     <td th:text="${task.priority.name}"/>
 
                     </tr>
