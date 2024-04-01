@@ -36,6 +36,10 @@ Java 17, Maven 3.8, PostgreSQL 14;
 - Страница просмотра задачи
   ![](/img/task.png)
 
+---
+#### Контакты для связи:
+* email: a.seldom@gmail.com
+* telegram: @aseldom
                                                                   
                                                           
                                                            

@@ -36,8 +36,7 @@ public class TaskController {
 
     @GetMapping("/new_tasks")
     public String getNew(Model model, HttpSession session) {
-        model.addAttribute("tasks",
-                covertTimeZone(taskService.findCompleteNew(false), (User) session.getAttribute("user"))
+        model.addAttribute("tasks", covertTimeZone(taskService.findCompleteNew(false), (User) session.getAttribute("user"))
         );
         return "tasks/list";
     }
